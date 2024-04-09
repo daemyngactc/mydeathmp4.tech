@@ -1,63 +1,89 @@
-const canvas = document.getElementById('pongCanvas');
-const ctx = canvas.getContext('2d');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic Pong Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+        }
+        canvas {
+            border: 2px solid white;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="pongCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('pongCanvas');
+        const ctx = canvas.getContext('2d');
 
-// Paddle properties
-const paddleWidth = 10;
-const paddleHeight = 100;
-let leftPaddleY = (canvas.height - paddleHeight) / 2;
-let rightPaddleY = (canvas.height - paddleHeight) / 2;
-const paddleSpeed = 8;
+        // Paddle properties
+        const paddleWidth = 10;
+        const paddleHeight = 100;
+        let leftPaddleY = (canvas.height - paddleHeight) / 2;
+        let rightPaddleY = (canvas.height - paddleHeight) / 2;
+        const paddleSpeed = 8;
 
-// Ball properties
-const ballSize = 10;
-let ballX = canvas.width / 2;
-let ballY = canvas.height / 2;
-let ballSpeedX = 5;
-let ballSpeedY = 3;
+        // Ball properties
+        const ballSize = 10;
+        let ballX = canvas.width / 2;
+        let ballY = canvas.height / 2;
+        let ballSpeedX = 5;
+        let ballSpeedY = 3;
 
-// Update function (called every frame)
-function update() {
-    // Move paddles
-    if (keys.w && leftPaddleY > 0) {
-        leftPaddleY -= paddleSpeed;
-    }
-    if (keys.s && leftPaddleY < canvas.height - paddleHeight) {
-        leftPaddleY += paddleSpeed;
-    }
-    if (keys.arrowUp && rightPaddleY > 0) {
-        rightPaddleY -= paddleSpeed;
-    }
-    if (keys.arrowDown && rightPaddleY < canvas.height - paddleHeight) {
-        rightPaddleY += paddleSpeed;
-    }
+        // Update function (called every frame)
+        function update() {
+            // Move paddles
+            if (keys.w && leftPaddleY > 0) {
+                leftPaddleY -= paddleSpeed;
+            }
+            if (keys.s && leftPaddleY < canvas.height - paddleHeight) {
+                leftPaddleY += paddleSpeed;
+            }
+            if (keys.arrowUp && rightPaddleY > 0) {
+                rightPaddleY -= paddleSpeed;
+            }
+            if (keys.arrowDown && rightPaddleY < canvas.height - paddleHeight) {
+                rightPaddleY += paddleSpeed;
+            }
 
-    // Move ball
-    ballX += ballSpeedX;
-    ballY += ballSpeedY;
+            // Move ball
+            ballX += ballSpeedX;
+            ballY += ballSpeedY;
 
-    // Bounce off top and bottom walls
-    if (ballY <= 0 || ballY >= canvas.height - ballSize) {
-        ballSpeedY *= -1;
-    }
+            // Bounce off top and bottom walls
+            if (ballY <= 0 || ballY >= canvas.height - ballSize) {
+                ballSpeedY *= -1;
+            }
 
-    // Bounce off paddles
-    if (ballX <= paddleWidth && ballY >= leftPaddleY && ballY <= leftPaddleY + paddleHeight) {
-        ballSpeedX *= -1;
-    }
-    if (ballX >= canvas.width - paddleWidth - ballSize && ballY >= rightPaddleY && ballY <= rightPaddleY + paddleHeight) {
-        ballSpeedX *= -1;
-    }
+            // Bounce off paddles
+            if (ballX <= paddleWidth && ballY >= leftPaddleY && ballY <= leftPaddleY + paddleHeight) {
+                ballSpeedX *= -1;
+            }
+            if (ballX >= canvas.width - paddleWidth - ballSize && ballY >= rightPaddleY && ballY <= rightPaddleY + paddleHeight) {
+                ballSpeedX *= -1;
+            }
 
-    // Draw paddles and ball
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, leftPaddleY, paddleWidth, paddleHeight);
-    ctx.fillRect(canvas.width - paddleWidth, rightPaddleY, paddleWidth, paddleHeight);
-    ctx.fillRect(ballX, ballY, ballSize, ballSize);
+            // Draw paddles and ball
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, leftPaddleY, paddleWidth, paddleHeight);
+            ctx.fillRect(canvas.width - paddleWidth, rightPaddleY, paddleWidth, paddleHeight);
+            ctx.fillRect(ballX, ballY, ballSize, ballSize);
 
-    // Request next frame
-    requestAnimationFrame(update);
-}
+            // Request next frame
+            requestAnimationFrame(update);
+        }
 
-// Start the game
-requestAnimationFrame(update);
+        // Start the game
+        requestAnimationFrame(update);
+    </script>
+</body>
+</html>
