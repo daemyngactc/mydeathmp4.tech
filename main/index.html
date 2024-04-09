@@ -1,65 +1,99 @@
 
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Basic Pong HTML Game</title>
-    <meta charset="UTF-8">
+    <title>Basic Pong Game</title>
     <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-        }
         body {
-            background: black;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            background-color: black;
         }
     </style>
 </head>
 <body>
-    <canvas width="750" height="585" id="game"></canvas>
+    <canvas id="pongCanvas"></canvas>
     <script>
-        const canvas = document.getElementById('game');
-        const context = canvas.getContext('2d');
-        const grid = 15;
-        const paddleHeight = grid * 5;
-        const maxPaddleY = canvas.height - grid - paddleHeight;
+        const canvas = document.getElementById('pongCanvas');
+        const ctx = canvas.getContext('2d');
 
-        // Define left and right paddles
-        const leftPaddle = {
-            x: grid * 2,
-            y: canvas.height / 2 - paddleHeight / 2,
-            width: grid,
-            height: paddleHeight,
-            dy: 0 // paddle velocity
-        };
+        // Paddle properties
+        const paddleWidth = 10;
+        const paddleHeight = 100;
+        let leftPaddleY = (canvas.height - paddleHeight) / 2;
+        let rightPaddleY = (canvas.height - paddleHeight) / 2;
+        const paddleSpeed = 8;
 
-        const rightPaddle = {
-            x: canvas.width - grid * 3,
-            y: canvas.height / 2 - paddleHeight / 2,
-            width: grid,
-            height: paddleHeight,
-            dy: 0 // paddle velocity
-        };
+        // Ball properties
+        const ballSize = 10;
+        let ballX = canvas.width / 2;
+        let ballY = canvas.height / 2;
+        let ballSpeedX = 5;
+        let ballSpeedY = 3;
 
-        // Define the ball
-        const ball = {
-            x: canvas.width / 2,
-            y: canvas.height / 2,
-            width: grid,
-            height: grid,
-            resetting: false, // keep track of when to reset the ball position
-            dx: 5, // ball velocity (start going to the top-right corner)
-            dy: -5 // ball velocity (start going upward)
-        };
+        // Update function (called every frame)
+        function update() {
+            // Move paddles
+            if (keys.w && leftPaddleY > 0) {
+                leftPaddleY -= paddleSpeed;
+            }
+            if (keys.s && leftPaddleY < canvas.height - paddleHeight) {
+                leftPaddleY += paddleSpeed;
+            }
+            if (keys.arrowUp && rightPaddleY > 0) {
+                rightPaddleY -= paddleSpeed;
+            }
+            if (keys.arrowDown && rightPaddleY < canvas.height - paddleHeight) {
+                rightPaddleY += paddleSpeed;
+            }
 
-        // Rest of the game logic and rendering goes here...
-        // You can add scoring, ball trajectory adjustments, and more!
+            // Move ball
+            ballX += ballSpeedX;
+            ballY += ballSpeedY;
 
-        // Remember, this is a basic implementation, and you can explore further features on your own.
+            // Bounce off top and bottom walls
+            if (ballY <= 0 || ballY >= canvas.height - ballSize) {
+                ballSpeedY *= -1;
+            }
 
+            // Bounce off paddles
+            if (ballX <= paddleWidth && ballY >= leftPaddleY && ballY <= leftPaddleY + paddleHeight) {
+                ballSpeedX *= -1;
+            }
+            if (ballX >= canvas.width - paddleWidth - ballSize && ballY >= rightPaddleY && ballY <= rightPaddleY + paddleHeight) {
+                ballSpeedX *= -1;
+            }
+
+            // Reset ball position if it goes out of bounds
+            if (ballX < 0 || ballX > canvas.width) {
+                ballX = canvas.width / 2;
+                ballY = canvas.height / 2;
+            }
+
+            // Draw paddles and ball
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, leftPaddleY, paddleWidth, paddleHeight);
+            ctx.fillRect(canvas.width - paddleWidth, rightPaddleY, paddleWidth, paddleHeight);
+            ctx.fillRect(ballX, ballY, ballSize, ballSize);
+
+            requestAnimationFrame(update);
+        }
+
+        // Keyboard input handling
+        const keys = {};
+        window.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+        });
+        window.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
+        });
+
+        // Start the game loop
+        requestAnimationFrame(update);
     </script>
 </body>
 </html>
