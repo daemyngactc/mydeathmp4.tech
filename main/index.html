@@ -1,198 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en-us">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Classic Pong Game</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: black;
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>DOOM</title>
+    <style type="text/css">
+        .dosbox-container {
+            width: 320px;
+            height: 200px;
         }
-        canvas {
-            border: 2px solid white;
+        .dosbox-container > .dosbox-overlay {
+            background: url(https://js-dos.com/cdn/DOOM.png);
         }
     </style>
 </head>
 <body>
-    <canvas id="pongCanvas"></canvas>
-    <script>
-        const canvas = document.getElementById('pongCanvas');
-        const ctx = canvas.getContext('2d');
-
-        // Paddle properties
-        const paddleWidth = 10;
-        const paddleHeight = 100;
-        let leftPaddleY = (canvas.height - paddleHeight) / 2;
-        let rightPaddleY = (canvas.height - paddleHeight) / 2;
-        const paddleSpeed = 8;
-
-        // Ball properties
-        const ballSize = 10;
-        let ballX = canvas.width / 2;
-        let ballY = canvas.height / 2;
-        let ballSpeedX = 5;
-        let ballSpeedY = 3;
-
-        // Update function (called every frame)
-        function update() {
-            // Move paddles
-            if (keys.w && leftPaddleY > 0) {
-                leftPaddleY -= paddleSpeed;
+    <div id="dosbox"></div>
+    <br/>
+    <button onclick="dosbox.requestFullScreen();">Make fullscreen</button>
+    <script type="text/javascript" src="https://js-dos.com/cdn/js-dos-api.js"></script>
+    <script type="text/javascript">
+        var dosbox = new Dosbox({
+            id: "dosbox",
+            onload: function (dosbox) {
+                dosbox.run("upload/DOOM-@evilution.zip", "./doom");
+            },
+            onrun: function (dosbox, app) {
+                console.log("App '" + app + "' is runned");
             }
-            if (keys.s && leftPaddleY < canvas.height - paddleHeight) {
-                leftPaddleY += paddleSpeed;
-            }
-            if (keys.arrowUp && rightPaddleY > 0) {
-                rightPaddleY -= paddleSpeed;
-            }
-            if (keys.arrowDown && rightPaddleY < canvas.height - paddleHeight) {
-                rightPaddleY += paddleSpeed;
-            }
-
-            // Move ball
-            ballX += ballSpeedX;
-            ballY += ballSpeedY;
-
-            // Bounce off top and bottom walls
-            if (ballY <= 0 || ballY >= canvas.height - ballSize) {
-                ballSpeedY *= -1;
-            }
-
-            // Bounce off paddles
-            if (ballX <= paddleWidth && ballY >= leftPaddleY && ballY <= leftPaddleY + paddleHeight) {
-                ballSpeedX *= -1;
-            }
-            if (ballX >= canvas.width - paddleWidth - ballSize && ballY >= rightPaddleY && ballY <= rightPaddleY + paddleHeight) {
-                ballSpeedX *= -1;
-            }
-
-            // Draw paddles and ball
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'white';
-            ctx.fillRect(0, leftPaddleY, paddleWidth, paddleHeight);
-            ctx.fillRect(canvas.width - paddleWidth, rightPaddleY, paddleWidth, paddleHeight);
-            ctx.fillRect(ballX, ballY, ballSize, ballSize);
-
-            // Request next frame
-            requestAnimationFrame(update);
-        }
-
-        // Start the game
-        requestAnimationFrame(update);
+        });
     </script>
 </body>
 </html>
-<style>body {
-    padding: 0;
-    margin: 0;
-}
-
-.joueur {
-    top: 50%;
-    width: 20px;
-    height: 100px;
-    position: absolute;
-}
-
-#joueur1 {
-    left: 50px;
-    border-right: 2px #101010 solid;
-}
-
-#joueur2 {
-    right: 50px;
-    border-left: 2px #101010 solid;
-}
-
-main {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-}
-
-ul {
-    list-style: none;
-    font-family: 'Open Sans', sans-serif;
-    font-weight: lighter;
-}
-
-#balle {
-    top: 50%;
-    left: 49.5%;
-    width: 20px;
-    height: 20px;
-    background: #303030;
-    position: absolute;
-    border-radius: 100%;
-}
-
-#middleline {
-    position: absolute;
-    left: 50%;
-    height: 100%;
-    border-left: 1px #202020 dashed;
-}
-
-.score {
-    position: absolute;
-    top: 50px;
-    font-size: 80px;
-}
-
-#scorejoueur1 {
-    left: 25%;
-}
-
-#scorejoueur2 {
-    right: 25%;
-}
-</style>
-<script>/* PONG 2 PLAYERS: Use "Z" & "S" for the left side and "up arrow" and "down arrow" for the right side */
-/* Project by Simon Ajzenman & Romuald Vanderlin */
-
-$(document).ready(function() {
-    var largeur = $(window).width();
-    var hauteur = $(window).height();
-    var positionJoueur1 = hauteur / 2;
-    var positionJoueur2 = hauteur / 2;
-    var zPressed = false;
-    var sPressed = false;
-    var upPressed = false;
-    var downPressed = false;
-    var ballPositionY = hauteur / 2;
-    var vitesseBalleY = 5;
-    var ballPositionX = largeur / 2;
-    var vitesseBalleX = 5;
-
-    function movePlayer() {
-        if (zPressed && positionJoueur1 > 0)
-            $("#joueur1").css("top", positionJoueur1 -= 5);
-        if (sPressed && positionJoueur1 < hauteur - 105)
-            $("#joueur1").css("top", positionJoueur1 += 5);
-        if (upPressed && positionJoueur2 > 0)
-            $("#joueur2").css("top", positionJoueur2 -= 5);
-        if (downPressed && positionJoueur2 < hauteur - 105)
-            $("#joueur2").css("top", positionJoueur2 += 5);
-    }
-
-    function moveBall() {
-        if (ballPositionY < 0) {
-            vitesseBalleY = vitesseBalleY * -1;
-        }
-        if (ballPositionY > hauteur) {
-            vitesseBalleY = vitesseBalleY * -1;
-        }
-        if (ballPositionX < 0) {
-            // Player 2 scores
-            changeScore(2);
-        }
-        if (ballPositionX > largeur) {
-            // Player 1 scores
-            changeScore(1);
-        }
-        // Update ball position</script>
