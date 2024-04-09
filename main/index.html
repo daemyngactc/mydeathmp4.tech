@@ -7,3 +7,66 @@ body {
   background-image: url('https://i.ibb.co/x8WCGMq/Screenshot-2024-04-09-133225.png')
 }
 </style>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Basic Pong HTML Game</title>
+    <meta charset="UTF-8">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            background: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <canvas width="750" height="585" id="game"></canvas>
+    <script>
+        const canvas = document.getElementById('game');
+        const context = canvas.getContext('2d');
+        const grid = 15;
+        const paddleHeight = grid * 5;
+        const maxPaddleY = canvas.height - grid - paddleHeight;
+
+        // Define left and right paddles
+        const leftPaddle = {
+            x: grid * 2,
+            y: canvas.height / 2 - paddleHeight / 2,
+            width: grid,
+            height: paddleHeight,
+            dy: 0 // paddle velocity
+        };
+
+        const rightPaddle = {
+            x: canvas.width - grid * 3,
+            y: canvas.height / 2 - paddleHeight / 2,
+            width: grid,
+            height: paddleHeight,
+            dy: 0 // paddle velocity
+        };
+
+        // Define the ball
+        const ball = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            width: grid,
+            height: grid,
+            resetting: false, // keep track of when to reset the ball position
+            dx: 5, // ball velocity (start going to the top-right corner)
+            dy: -5 // ball velocity (start going upward)
+        };
+
+        // Rest of the game logic and rendering goes here...
+        // You can add scoring, ball trajectory adjustments, and more!
+
+        // Remember, this is a basic implementation, and you can explore further features on your own.
+
+    </script>
+</body>
+</html>
