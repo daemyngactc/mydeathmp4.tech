@@ -48,23 +48,16 @@ function update() {
         ballSpeedX *= -1;
     }
 
-    // Draw paddles
+    // Draw paddles and ball
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = 'white';
     ctx.fillRect(0, leftPaddleY, paddleWidth, paddleHeight);
     ctx.fillRect(canvas.width - paddleWidth, rightPaddleY, paddleWidth, paddleHeight);
+    ctx.fillRect(ballX, ballY, ballSize, ballSize);
 
-    // Draw ball
-    ctx.beginPath();
-    ctx.arc(ballX, ballY, ballSize, 0, Math.PI * 2);
-    ctx.fill();
+    // Request next frame
+    requestAnimationFrame(update);
 }
 
-// Call the update function repeatedly
-function gameLoop() {
-    update();
-    requestAnimationFrame(gameLoop);
-}
-
-gameLoop();
-
-        
+// Start the game
+requestAnimationFrame(update);
