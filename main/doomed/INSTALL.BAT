@@ -1,0 +1,12 @@
+@echo off
+DEICE.EXE
+if ERRORLEVEL == 1 GOTO END
+DOOM_SE.EXE
+if ERRORLEVEL == 1 GOTO ERROR
+DEL DOOM_SE.EXE
+SETUP
+goto END
+:ERROR
+echo Error installing DOOM_SE.EXE!
+:END
+
